@@ -21,7 +21,7 @@ def _calculate(arr, step):
     return 0
 
 def _search_contiguous(arr, target_sum, r): 
-    _contiguous_list = [0]  
+    _contiguous_list = []  
     n = len(arr) 
     start = 0
     curr_sum = arr[0] 
@@ -30,6 +30,7 @@ def _search_contiguous(arr, target_sum, r):
     while i <= n: 
         if curr_sum == target_sum and index == r: 
             _contiguous_list = arr[i-r:i]
+            return min(_contiguous_list) + max(_contiguous_list) 
         while index >= r: 
             curr_sum -= arr[start] 
             start += 1
@@ -39,7 +40,7 @@ def _search_contiguous(arr, target_sum, r):
             index += 1
         i += 1
           
-    return min(_contiguous_list) + max(_contiguous_list) 
+    return 0
 
 def _calculate_contiguous(arr, step):
     _target = _calculate(arr, step)
