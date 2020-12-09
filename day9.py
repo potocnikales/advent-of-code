@@ -23,13 +23,12 @@ def _calculate(arr, step):
 def _search_contiguous(arr, target_sum, r): 
     _contiguous_list = [0]  
     n = len(arr) 
-    count = start = 0
+    start = 0
     curr_sum = arr[0] 
     index = 1
     i = 1
     while i <= n: 
         if curr_sum == target_sum and index == r: 
-            count += 1
             _contiguous_list = arr[i-r:i]
         while index >= r: 
             curr_sum -= arr[start] 
