@@ -20,28 +20,6 @@ def _calculate(arr):
 
     return _value * _bus_num
 
-def _calc_mod_div(_target, _num, _diff, _range):
-    _ret = []
-    for i in range(_range):
-        _mod = _diff % _num
-        _full = int(_diff/_num) * _num
-        _x = i * _num + (_full + (_num - _mod))
-        if _x % _target == 0:
-            _ret.append(_x)
-    return _ret
-
-def _calc_mod_div_test(_arr, _range):
-    _ret = 0
-    for i in range(_range):
-        _counter = 0
-        for e in _arr:
-            if i % e[0] == e[1]:
-                _counter += 1
-        if _counter == len(_arr):
-            _ret = i
-            break
-    return _ret
-
 ###################################################################
 # https://rosettacode.org/wiki/Chinese_remainder_theorem#Python_3.6
 def chinese_remainder(n, a):
