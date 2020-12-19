@@ -32,18 +32,18 @@ def _calculate(source, num):
     _traverse(tree, num)
     res = 0
     for expr in tree.body:
-        val = eval(compile(ast.Expression(expr.value), 'solve_problem_'+str(num), 'eval'))
+        val = eval(compile(ast.Expression(expr.value), "solve_problem_"+str(num), "eval"))
         res += val
     return res
 
 @timer
 def solve_problem_1():
-    source = read_input().replace('*', '-')
+    source = read_input().replace("*", "-")
     return _calculate(source, 1)
 
 @timer
 def solve_problem_2():
-    source = read_input().translate(str.maketrans('+*', '*+'))
+    source = read_input().translate(str.maketrans("+*", "*+"))
     return _calculate(source, 2)
 
 if __name__ == "__main__":
