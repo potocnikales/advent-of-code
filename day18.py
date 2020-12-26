@@ -1,5 +1,5 @@
 from utils import timer
-import ast, sys
+import ast
 
 def read_input():
     with open("input/" + "day18") as f:
