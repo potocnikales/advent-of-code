@@ -1,7 +1,7 @@
 from utils import read_file, timer
 from collections import defaultdict
 
-def tokenise_line(line: str):
+def _tokenise(line):
     tokens = []
     token = ""
     for char in line:
@@ -15,14 +15,12 @@ def tokenise_line(line: str):
 def read_input():
     with open("input/" + "day24") as f:
         source = f.read()
+    return [_tokenise(line) for line in source.splitlines()]
 
-    return [tokenise_line(line) for line in source.splitlines()]
-
-def part_one(data):
+def _calculate(data):
     tiles = defaultdict(bool)
     for tile in data:
-        x = 0
-        y = 0
+        x = y = 0
         for direction in tile:
             if direction == "e":
                 x += 1
@@ -43,7 +41,7 @@ def part_one(data):
         tiles[x, y] = not tiles[x, y]
     return sum(tiles.values())
 
-def neighbours(tiles, x, y):
+def _neighbours(tiles, x, y):
     return [
         tiles[x - 0.5, y - 1],
         tiles[x + 0.5, y - 1],
@@ -53,8 +51,7 @@ def neighbours(tiles, x, y):
         tiles[x + 0.5, y + 1],
     ]
 
-
-def part_two(data):
+def _calculate_black(data):
     tiles = defaultdict(bool)
     for tile in data:
         x = 0.0
@@ -91,7 +88,7 @@ def part_two(data):
                 x += 0.0
                 if y % 2:
                     x += 0.5
-                black_neighbours = sum(neighbours(tiles, x, y))
+                black_neighbours = sum(_neighbours(tiles, x, y))
                 if tiles[x, y] and black_neighbours in (1, 2):
                     new_tiles[x, y] = True
                 elif (not tiles[x, y]) and black_neighbours == 2:
@@ -102,12 +99,12 @@ def part_two(data):
 @timer
 def solve_problem_1():
     data = read_input()
-    return part_one(data)
+    return _calculate(data)
 
 @timer
 def solve_problem_2():
     data = read_input()
-    return part_two(data)
+    return _calculate_black(data)
 
 if __name__ == "__main__":
 

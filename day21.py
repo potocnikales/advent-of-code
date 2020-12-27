@@ -3,25 +3,28 @@ from utils import read_file, timer
 def read_input():
     input = read_file("day21")
 
-    revmap = {}
-    data = []
+    _map = {}
+    _data = []
     for line in input:
-        igs, alls = line.split("(contains")
-        igs = set(igs.strip().split())
-        alls = alls[:-1].strip().split(",")
-        alls = [x.strip() for x in alls]
-        for alg in alls:
-            if alg not in revmap:
-                revmap[alg] = set(igs)
+        _content, _allergens = line.split("(contains")
+        _content = set(_content.strip().split())
+        _allergens = _allergens[:-1].strip().split(",")
+        _allergens = [x.strip() for x in _allergens]
+        for alg in _allergens:
+            if alg not in _map:
+                _map[alg] = set(_content)
             else:
-                revmap[alg] &= igs
+                _map[alg] &= _content
 
-        data.append((igs, alls))
+        _data.append((_content, _allergens))
 
-    return (revmap, data)
+    _with = set()
+    for v in _map.values():
+        _with |= v
 
-# Taken from (https://github.com/cheran-senthil/PyRival/blob/master/pyrival/graphs/hopcroft_karp.py)
-# Apache License 2.0 (https://github.com/cheran-senthil/PyRival/blob/master/LICENSE)
+    return (_map, _data, _with)
+
+# https://en.wikipedia.org/wiki/Hopcroft–Karp_algorithm
 def hopcroft_karp(graph, n, m):
     """
     Maximum bipartite matching using Hopcroft-Karp algorithm, running in O(|E| sqrt(|V|))
@@ -80,38 +83,30 @@ def hopcroft_karp(graph, n, m):
 
 @timer
 def solve_problem_1():
-    revmap, data = read_input()
+    _map, _data, _with = read_input()
 
-    bad = set()
-    for v in revmap.values():
-        bad |= v
-
-    part1 = 0
-    for igs, _ in data:
-        for x in igs:
-            part1 += x not in bad
-    return part1
+    _res = 0
+    for ingredients, _ in _data:
+        for x in ingredients:
+            _res += x not in _with
+    return _res
 
 @timer
 def solve_problem_2():
-    revmap, data = read_input()
+    _map, _, _with = read_input()
 
-    bad = set()
-    for v in revmap.values():
-        bad |= v
+    alergens = list(_map.keys())
+    ingredients = list(_with)
+    alergens.sort()
+    ingredients.sort()
 
-    algs = list(revmap.keys())
-    ings = list(bad)
-    algs.sort()
-    ings.sort()
-
-    graph = [[] for _ in algs]
-    for alg, v in revmap.items():
+    graph = [[] for _ in alergens]
+    for alg, v in _map.items():
         for x in v:
-            graph[algs.index(alg)].append(ings.index(x))
+            graph[alergens.index(alg)].append(ingredients.index(x))
 
-    m1, _ = hopcroft_karp(graph, len(algs), len(ings))
-    return ",".join(ings[x] for x in m1)
+    match, _ = hopcroft_karp(graph, len(alergens), len(ingredients))
+    return ",".join(ingredients[x] for x in match)
 
 if __name__ == "__main__":
 
